@@ -15,9 +15,9 @@ emissions_data <- get_emissions_data()
 Particular_nation <- filter(emissions_data, Nation == "AFGHANISTAN")
 
 line_graph <- ggplot(data = Particular_nation, mapping = 
-              aes(x = Year, y = Per.capita.CO2.emissions..metric.tons.of.carbon.), na.rm = TRUE) +
+              aes(x = Year, y = Per.capita.CO2.emissions..metric.tons.of.carbon., group = 1)) +
+  geom_line() +
   geom_point() +
-  geom_step() +
   labs(
     title = "Emissions of Nation",
     x = "Year",
@@ -51,7 +51,7 @@ plot <- ggplot(top_15_nations_emission) +
 plot
 
 # interactive map
-nations_emission_interactive_map <- leaflet(data = get_emissions_data()) %>%
+nations_emission_interactive_map <- leaflet(data = emissions_data) %>%
   addProviderTiles("CartoDB.Positron") %>%
   setView(lng = 150, lat = 45, zoom = 7) %>%
   addCircleMarkers(
