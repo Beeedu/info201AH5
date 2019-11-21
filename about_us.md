@@ -9,4 +9,4 @@ The Information School
 University of Washington  
 Autumn 2019  
 
-[Link to our wiki](https://github.com/Beeedu/info201AH5/wiki) (Here you can find our project proposal and our technical report).
+[Link to our wiki](https://github.com/Beeedu/info201AH5/wiki) (Here you can find our project proposal and our [technical report](https://github.com/Beeedu/info201AH5/wiki/Technical-Report)).
