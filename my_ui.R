@@ -40,7 +40,7 @@ visualizations <- tabPanel(
         ),
         mainPanel(
           h3("Plot title"),
-          p("Plot would go here"),
+          plotOutput("countries_emissions_plot")
         )
       )
     ),
