@@ -65,7 +65,7 @@ visualizations <- tabPanel(
         ),
         mainPanel(
           h3("Map title"),
-          p("Map would go here"),
+          plotOutput("world_emissions_map")
         )
       )
     )
