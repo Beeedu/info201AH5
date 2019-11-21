@@ -1,18 +1,19 @@
 library("shiny")
+library("markdown")
 
 background <- tabPanel(
   "Background",
-  mainPanel(p("Read this from a .txt file?"))
+  mainPanel(includeMarkdown("welcome.md"))
 )
 
 conclusion <- tabPanel(
   "Conclusion",
-  mainPanel(p("Read this from a .txt file?"))
+  mainPanel(p("Conclusion"))
 )
 
 about_us <- tabPanel(
   "About Us",
-  mainPanel(p("Read this from a .txt file?"))
+  mainPanel(includeMarkdown("about_us.md"))
 )
 
 visualizations <- tabPanel(
@@ -39,7 +40,7 @@ visualizations <- tabPanel(
           )
         ),
         mainPanel(
-          h3("Plot title"),
+          h3("CO2 emissions per capita of select countries"),
           plotOutput("countries_emissions_plot")
         )
       )
@@ -64,7 +65,8 @@ visualizations <- tabPanel(
           )
         ),
         mainPanel(
-          h3("Map title"),
+          h3("Map of CO2 emissions of countries"),
+          p("map goes here"),
           plotOutput("world_emissions_map")
         )
       )

@@ -5,8 +5,8 @@ account: blynch
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1504383
-bundleId: 2605741
+bundleId: 2606098
 url: https://blynch.shinyapps.io/info201AH5/
-when: 1574300575.6993
+when: 1574311904.44813
 asMultiple: FALSE
 asStatic: FALSE
