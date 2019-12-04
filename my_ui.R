@@ -16,11 +16,8 @@ about_us <- tabPanel(
   mainPanel(includeMarkdown("about_us.md"))
 )
 
-visualizations <- tabPanel(
-  "Visualizations",
-  mainPanel(
-    tabPanel(
-      "Plot",
+linePlot <- tabPanel(
+      "Line Plot",
       sidebarLayout(
         sidebarPanel(
           sliderInput(
@@ -45,43 +42,39 @@ visualizations <- tabPanel(
           plotOutput("countries_emissions_plot")
         )
       )
-    ),
-    tabPanel(
-      "Map",
-      sidebarLayout(
-        sidebarPanel(
-          # sliderInput(
-          #   inputId = "yr",
-          #   label = "Year",
-          #   min = 1751,
-          #   max = 2014,
-          #   value = 2014,
-          #   sep = "",
-          # )
-          selectInput(
-            inputId = "yr",
-            label = "Year",
-            choices = c(1751:2014),
-            selected = 2014
-          )
-        ),
-        mainPanel(
-          h3("Map of CO2 emissions of countries"),
-          p("map goes here"),
-          plotOutput("world_emissions_map")
-        )
+    )
+
+map_tab <- tabPanel(
+  "Map",
+  sidebarLayout(
+    sidebarPanel(
+      # sliderInput(
+      #   inputId = "yr",
+      #   label = "Year",
+      #   min = 1751,
+      #   max = 2014,
+      #   value = 2014,
+      #   sep = "",
+      # )
+      selectInput(
+        inputId = "yr",
+        label = "Year",
+        choices = year_range,
+        selected = 2014
       )
+    ),
+    mainPanel(
+      plotlyOutput("emissions_map")
     )
   )
 )
-
-visTab <- tabPanel("Visualizations", visualizations)
 
 my_ui <- fluidPage(
   navbarPage(
     "World Nation Carbon Emissions Data Report",
     background,
-    visTab,
+    linePlot,
+    map_tab,
     conclusion,
     about_us
   )
