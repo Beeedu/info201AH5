@@ -1,44 +1,39 @@
 library("shiny")
-# library("leaflet")
+library("leaflet")
 library("ggplot2")
-# library("ggmap")
+library("plotly")
+library("stringr")
+library("dplyr")
 
 source("analysis.R")
 
 my_server <- function(input, output) {
-
-  # output$world_emissions_map <- renderPlot({
-  # #   ggplot(world_map) +
-  # #     geom_polygon(
-  # #       mapping = aes(x = long, y = lat, group = group),
-  # #       color = "white",
-  # #       size = .1
-  # #     ) +
-  # #     coord_map()
-  # 
-  # #   blank_theme <- theme_bw() +
-  # #     theme(
-  # #       axis.line = element_blank(),        # remove axis lines
-  # #       axis.text = element_blank(),        # remove axis labels
-  # #       axis.ticks = element_blank(),       # remove axis ticks
-  # #       axis.title = element_blank(),       # remove axis titles
-  # #       plot.background = element_blank(),  # remove gray background
-  # #       panel.grid.major = element_blank(), # remove major grid lines
-  # #       panel.grid.minor = element_blank(), # remove minor grid lines
-  # #       panel.border = element_blank()      # remove border around plot
-  # #     )
-  # #
-  # #   ggplot(world_map_joined) +
-  # #     geom_polygon(
-  # #       mapping = aes(x = long, y = lat, group = group, fill = co2_per_capita),
-  # #       color = "white",
-  # #       size = .1
-  # #     ) +
-  # #     coord_map() +
-  # #     scale_fill_continuous(low = "#132B43", high = "Red") +
-  # #     labs(fill = "CO2 emissions per capita") +
-  # #     blank_theme
-  # })
+  
+  output$emissions_map <- renderPlotly({
+    
+    map_df <- map_df %>% filter(Year == input$yr)
+    
+    # Join the two sets of data
+    world_map_joined <- left_join(world_map, map_df, by = 'region')
+    
+    # Plot the data
+    emissions_map <- ggplot(
+      data = world_map_joined,
+      aes(x = long, y = lat, group = group, text = region, fill = co2)
+    ) +
+      geom_polygon(color = "white", size = .5) +
+      scale_fill_continuous(low = "Green", high = "Red") +
+      labs(
+        title = paste("CO2 emissions of nations worldwide in ", input$yr, sep = ""),
+        fill = "Metric tons of CO2 per capita",
+        x = "Longitude",
+        y = "Latitude"
+      )
+    
+    emissions_map <- ggplotly(emissions_map, height = 700, width = 1250)
+    
+    emissions_map
+  })
 
 output$countries_emissions_plot <- renderPlot(
   ggplot() +

@@ -1,11 +1,5 @@
 library("ggplot2")
 library("dplyr")
-# library("rvest")
-# library("magrittr")
-# library("ggmap")
-# library("stringr")
-# library("maps")
-# library("mapproj")
 
 # This document is where data wrangling will take place.
 
@@ -14,67 +8,61 @@ get_emissions_data <- function() {
   read.csv("co2-emissions-by-nation.csv", stringsAsFactors = FALSE)
 }
 
-# # Map
-# 
-# # Select the relevant data
-# map_df <- get_emissions_data() %>%
-#   rename(co2_per_capita = "Per.capita.CO2.emissions..metric.tons.of.carbon.") %>%
-#   select(Nation, Year, co2_per_capita)
-# map_df <- map_df[4:nrow(map_df),]
-# 
-# # Create the map
-# world_map <- map_data("world")
-# 
-# # Inspect
-# map_df %>%
-#   select(Nation) %>%
-#   as.factor() %>%
-#   levels()
-# 
-# world_map %>%
-#   select(region) %>%
-#   as.factor() %>%
-#   levels()
-# 
-# # Change country names so they match between the data and the map
-# world_map <- world_map %>%
-#   mutate_all(.funs = toupper)
-# 
-# map_df$Nation <- map_df$Nation %>%
-#   recode(
-#     'UNITED STATES OF AMERICA' = 'USA',
-#     'UNITED KINGDOM' = 'UK',
-#     'VIET NAM' = 'VIET NAM',
-#     'REPUBLIC OF KOREA' = 'SOUTH KOREA',
-#     'WALLIS AND FUTUNA ISLANDS' = 'WALLIS AND FUTUNA'
-#   )
-# 
-# # Join the two sets of data
-# world_map_joined <- left_join(world_map, map_df, by = c('region' = 'Nation'))
-# #
-# blank_theme <- theme_bw() +
-#   theme(
-#     axis.line = element_blank(),        # remove axis lines
-#     axis.text = element_blank(),        # remove axis labels
-#     axis.ticks = element_blank(),       # remove axis ticks
-#     axis.title = element_blank(),       # remove axis titles
-#     plot.background = element_blank(),  # remove gray background
-#     panel.grid.major = element_blank(), # remove major grid lines
-#     panel.grid.minor = element_blank(), # remove minor grid lines
-#     panel.border = element_blank()      # remove border around plot
-#   )
-# 
-# ggplot(world_map_joined) +
-#   geom_polygon(
-#     mapping = aes(x = long, y = lat, group = group, fill = co2_per_capita),
-#     color = "white",
-#     size = .1
-#   ) +
-#   coord_map() +
-#   scale_fill_continuous(low = "#132B43", high = "Red") +
-#   labs(fill = "CO2 emissions per capita") +
-#   blank_theme
+year_range <- get_emissions_data() %>%
+  rename(co2_per_capita = "Per.capita.CO2.emissions..metric.tons.of.carbon.") %>%
+  filter(!is.na(as.numeric(co2_per_capita))) %>%
+  arrange(Year) %>%
+  select(Year)
 
+year_range <- year_range[[1]] %>% unique()
+
+# Map
+
+# Select the relevant data
+map_df <- get_emissions_data() %>%
+  rename(co2_per_capita = "Per.capita.CO2.emissions..metric.tons.of.carbon.") %>%
+  select(Nation, Year, co2_per_capita) 
+
+# Create the map
+world_map <- map_data("world")
+
+map_df <- map_df[4:nrow(map_df),] %>% 
+  mutate(region = Nation) %>%
+  select(-Nation) %>%
+  mutate(co2 = as.numeric(co2_per_capita))
+
+map_df$region <- map_df$region %>% sapply(str_to_title)
+
+# Recode country names (2014) to match the world map
+map_df$region <- map_df$region %>%
+  recode(
+    'United States Of America' = 'USA',
+    'United Kingdom' = 'UK',
+    'Viet Nam' = 'Vietnam',
+    'Democratic Republic Of The Congo (Formerly Zaire)' = 'Democratic Republic of the Congo',
+    'Brunei (Darussalam)' = 'Brunei',
+    'China (Mainland)' = 'China',
+    'Libyan Arab Jamahiriyah' = 'Libya',
+    'Republic Of South Sudan' = 'South Sudan',
+    'Republic Of Sudan' = 'Sudan',
+    'Bosnia & Herzegovina' = 'Bosnia and Herzegovina',
+    'Republic Of Korea' = 'South Korea',
+    'Democratic People S Republic Of Korea' = 'North Korea',
+    'Italy (Including San Marino)' = 'Italy',
+    'Islamic Republic Of Iran' = 'Iran',
+    'Russian Federation' = 'Russia',
+    'Plurinational State Of Bolivia' = 'Bolivia',
+    'United Republic Of Tanzania' = 'Tanzania',
+    'Myanmar (Formerly Burma)' = 'Myanmar',
+    'Lao People S Democratic Republic' = 'Laos',
+    'Republic Of Moldova' = 'Moldova',
+    'France (Including Monaco)' = 'France',
+    'Republic Of Cameroon' = 'Cameroon',
+    'Cote D Ivoire' = 'Ivory Coast',
+    'Timor-Leste (Formerly East Timor)' = 'Timor-Leste',
+    'Syrian Arab Republic' = 'Syria',
+    'Congo' = 'Republic of Congo'
+  )
 
 # Line graph
 emissions_data <- get_emissions_data()
