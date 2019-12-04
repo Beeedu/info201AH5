@@ -5,29 +5,27 @@ library(dplyr)
 
 # Function to get started with a fresh data frame.
 get_emissions_data <- function() {
-  read.csv("co2-emissions-by-nation.csv", stringsAsFactors = FALSE)
+  read.csv("/Users/JasonWeng/Info201/info201AH5/co2-emissions-by-nation.csv", stringsAsFactors = FALSE)
 }
-View(get_emissions_data())
 
 emissions_data <- get_emissions_data()
 
-# Line graph
-line_graph <- ggplot() +
-  geom_line(data = filter(emissions_data, Nation == "AFGHANISTAN"),
-            mapping = aes(x = Year,
-                          y = Per.capita.CO2.emissions..metric.tons.of.carbon.,
-                          group = 1), color = "blue") +
-  geom_line(data = filter(emissions_data, Nation == "ALBANIA"),
-            mapping = aes(x = Year,
-                          y = Per.capita.CO2.emissions..metric.tons.of.carbon.,
-                          group = 1), color = "red") +
-  labs(
-    title = "Emissions of Nation",
-    x = "Year",
-    y = "Emissions Per Capita"
-  )
+emissions_data <- emissions_data[4:nrow(emissions_data),]
 
-line_graph
+# Line graph
+# line_graph <- ggplot() +
+#   geom_line(data = filter(emissions_data, Nation == emissions_data[[input$checked_countries]]),
+#             
+#             mapping = aes(x = Year,
+#                           y = Per.capita.CO2.emissions..metric.tons.of.carbon.,
+#                          group = 1), color = "blue") +
+#   labs(
+#     title = "Emissions of Nation",
+#     x = "Year",
+#     y = "Emissions Per Capita"
+# )
+
+#line_graph
 
 # # Summary Table
 # get_emissions_summary_table <- emissions_data %>%

@@ -7,20 +7,33 @@ my_server <- function(input, output) {
   #   
   # })
   
-output$countries_emissions_plot <- renderPlot( 
-  ggplot() +
-    geom_line(data = filter(emissions_data, Nation == "AFGHANISTAN"),
-              mapping = aes(x = Year,
-                            y = Per.capita.CO2.emissions..metric.tons.of.carbon.,
-                            group = 1), color = "blue") +
-    geom_line(data = filter(emissions_data, Nation == "ALBANIA"),
-              mapping = aes(x = Year,
-                            y = Per.capita.CO2.emissions..metric.tons.of.carbon.,
-                            group = 1), color = "red") +
-    labs(
-      title = "Emissions of Nation",
-      x = "Year",
-      y = "Emissions Per Capita"
-    )
-)
+  output$countries_emissions_plot <- renderPlot({
+    
+    # checked <- input$checked_countries
+    # 
+    # emissions_data <- emissions_data %>%
+    #   filter(Nation == checked)
+    
+    emissions_data <- emissions_data %>%
+      rename(co2_per_capita = "Per.capita.CO2.emissions..metric.tons.of.carbon.")
+    
+    
+    emissions_data <- emissions_data[emissions_data$Year%in%seq(input$yr_range[1], input$yr_range[2], by = 1),]
+    emissions_data <- emissions_data[emissions_data$Nation%in%input$checked_countries,]
+      
+    ggplot() +
+      geom_line(data = emissions_data,
+                mapping = aes(x = Year,
+                              y = co2_per_capita,
+                              group = Nation,
+                              color = Nation)
+                ) +
+      labs(
+        title = "Emissions of Nation",
+        x = "Year",
+        y = "Emissions Per Capita"
+      )
+    
+  })
 }
+

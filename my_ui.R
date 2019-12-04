@@ -35,7 +35,8 @@ visualizations <- tabPanel(
           checkboxGroupInput(
             inputId = "checked_countries",
             label = "Countries",
-            choices = c("United States", "China", "United Kingdom")
+            choices = emissions_data$Nation %>% unique(),
+            selected = "UNITED STATES OF AMERICA"
           )
         ),
         mainPanel(
