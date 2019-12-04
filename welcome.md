@@ -10,5 +10,5 @@
  - **How will it be addressed?**: We will compare countries based on their change over time of the types of energy they are using and by their total emissions per capita. This will shed some light on whether certain countries have been improving or regressing over time with regard to their effect on climate change.
 
 **Research questions**
- - Question 1: What are the rankings of countries by the most decrease in emissions per capita over time?
- - Question 2: What are the rankings of countries by the emissions per capita in a particular year?
+ - What are the rankings of countries by the most decrease in emissions per capita over time?
+ - What are the rankings of countries by the emissions per capita in a particular year?

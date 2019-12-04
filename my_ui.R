@@ -1,4 +1,5 @@
 library("shiny")
+library("plotly")
 library("markdown")
 
 background <- tabPanel(
@@ -8,7 +9,7 @@ background <- tabPanel(
 
 conclusion <- tabPanel(
   "Conclusion",
-  mainPanel(p("Conclusion"))
+  mainPanel(includeMarkdown("conclusion.md"))
 )
 
 about_us <- tabPanel(
@@ -23,17 +24,20 @@ linePlot <- tabPanel(
           sliderInput(
             inputId = "yr_range",
             label = "Year range",
-            min = 1751,
+            min = 1950,
             max = 2014,
-            value = c(1751, 2014),
-            sep = "",
+            value = year_range,
+            sep = ""
           ),
-          # Make this checkbox group drop down, save space
-          # if user is not using the filter
+          # checkboxInput(
+          #   inputId = select_all,
+          #   label = "Select All",
+          #   value = F,
+          # ),
           checkboxGroupInput(
             inputId = "checked_countries",
             label = "Countries",
-            choices = emissions_data$Nation %>% unique(),
+            choices = country_list,
             selected = "UNITED STATES OF AMERICA"
           )
         ),
@@ -48,14 +52,6 @@ map_tab <- tabPanel(
   "Map",
   sidebarLayout(
     sidebarPanel(
-      # sliderInput(
-      #   inputId = "yr",
-      #   label = "Year",
-      #   min = 1751,
-      #   max = 2014,
-      #   value = 2014,
-      #   sep = "",
-      # )
       selectInput(
         inputId = "yr",
         label = "Year",
